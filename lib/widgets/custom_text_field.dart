@@ -16,7 +16,7 @@ class CustomTextField extends StatelessWidget {
     this.hint,
     this.prefix,
     this.suffix,
-    this.obscure,
+    this.obscure = false,
     this.textInputType,
     this.onChanged,
     this.enabled,
