@@ -1,13 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_mobx/screens/list_screen.dart';
 import 'package:todo_mobx/stores/login_store.dart';
 import 'package:todo_mobx/widgets/custom_icon_button.dart';
 import 'package:todo_mobx/widgets/custom_text_field.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
 
-  final LoginStore loginStore = LoginStore();
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+
+  LoginStore loginStore;
+  ReactionDisposer disposer;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    loginStore = Provider.of<LoginStore>(context);
+    disposer = reaction(
+      (_) => loginStore.loggedIn,
+      (loggedIn) {
+        if (loggedIn) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => ListScreen())
+          );
+        }
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +72,7 @@ class LoginScreen extends StatelessWidget {
                       onTap: loginStore.togglePasswordVisibility,
                     ),
                   ),
+                  SizedBox(height: 16,),
                   SizedBox(
                     height: 44,
                     child: ElevatedButton(
@@ -72,5 +99,11 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    disposer();
+    super.dispose();
   }
 }

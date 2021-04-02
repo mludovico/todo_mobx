@@ -27,11 +27,22 @@ abstract class _LoginStore with Store{
   @observable
   bool loading = false;
 
+  @observable
+  bool loggedIn = false;
+
   @action
   Future<void> login() async {
     loading = true;
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
     loading = false;
+    loggedIn = true;
+  }
+
+  @action
+  void logout() {
+    loggedIn = false;
+    email = '';
+    password = '';
   }
 
   @computed

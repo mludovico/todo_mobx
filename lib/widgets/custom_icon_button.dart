@@ -4,7 +4,7 @@ class CustomIconButton extends StatelessWidget {
 
   final double radius;
   final IconData iconData;
-  final Function onTap;
+  final VoidCallback onTap;
 
   CustomIconButton({
     this.radius, this.iconData, this.onTap
@@ -12,10 +12,15 @@ class CustomIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      padding: const EdgeInsets.all(0),
-      icon: Icon(iconData),
-      onPressed: onTap,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(radius),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          child: Icon(iconData),
+          onTap: onTap,
+        ),
+      ),
     );
   }
 }
